@@ -35,7 +35,13 @@ void *createTree(void *(*init)(), int (*compare)(void *data, void *root), void *
 
 int addNewNode(Tree *tree);
 
+void freeTree(Tree* tree );
+
+void printTree(Node* node, void (*print)(void* Node));
+
 int removeNode(Tree *tree, void *(*get)(void *data), int (*compare)(void *data, void *root));
+
 void *findNode(Tree *tree,void *(*get)(void *),int (*compare)(void *,void *));
+
 double averageKey(Node *temp,double (*get)(void *), int counter);
 #endif
