@@ -2,7 +2,7 @@
 #include "matam.h"
 
 void *createTree(void *(*init)(), int (*compare)(void *data, void *root), void *(*get)(void *data),
-                 void freeData(void *data)) {
+                 void freeData(void *data),void (*printTree)(void* data)) {
     /*Creat new tree of cars*/
     Tree *tree = (Tree *) checked_malloc(sizeof(Tree));
     tree->root = NULL;
@@ -11,6 +11,7 @@ void *createTree(void *(*init)(), int (*compare)(void *data, void *root), void *
     tree->get = get;
     tree->compare = compare;
     tree->freeData = freeData;
+    tree->printTree = printTree;
     return tree;
 }
 
@@ -108,9 +109,9 @@ Node *removeNodeHelper(Node *root, char *detailCheck, int *elementCounter, int (
 }
 
 int removeNode(Tree *tree, void *(*get)(void *), int (*compare)(void *data, void *root)) {
-    /*Delete car by help funcs*/
+    /*Delete object by help funcs*/
     int tmpCount = tree->elementCount;
-    char *detailCheck = (char *) checked_malloc(sizeof(char) * 254);
+    char *detailCheck = (char *) checked_malloc(sizeof(char) * 256);
     detailCheck = (*get)(detailCheck);
     if (tree->root == NULL) {
         printf("Empty tree\n");
@@ -127,31 +128,99 @@ int removeNode(Tree *tree, void *(*get)(void *), int (*compare)(void *data, void
 
 }
 
-/*
+int deleteAllNodesLinkedList(LinkedNode **head) {
+    /*REMOVE ALL THE CLIENTS*/
+    LinkedNode *temp = (*head);
+    while (*head != NULL) {
+        temp = *head;
+        *head = temp->next;
+        checked_free(temp);
+    }
+    checked_free(head);
+    printf("ALL CLIENTS REMOVED\n");
+    return 1;
+}
+
+
+LinkedNode *addToList(LinkedNode **head, void* data) {
+    /*CREATE CLIENT LIST AND CLIENT STRUCT AND ADD TO THE LINKED LIST */
+    LinkedNode *new;
+    new = (LinkedNode *) checked_malloc(sizeof(LinkedNode));
+    new->data = data;
+    new->next = (*head);
+    (*head) = new;
+    return (*head);
+}
+
+
+
 LinkedNode *findNodeHelper(Node *root, LinkedNode **head, void * dataCheck, int (*compare)(void *, void *)) {
-    finding client by Id and create linked list
+   /* finding client by Id and create linked list*/
     if ((root) == NULL) {
         return NULL;
     }
-    findNodeHelper(root->left, head, get);
+    findNodeHelper(root->left, head, dataCheck,compare);
     if (compare(root->data,dataCheck) == 0) {
-        (*head) = addToListC(head, root->data);
+        (*head) = addToList(head, root->data);
     }
-    findNodeHelper(root->right, head, idCheck);
+    findNodeHelper(root->right, head, dataCheck,compare);
     return (*head);
 }
 
 void *findNode(Tree *tree, void *(*get)(void *), int (*compare)(void *, void *)) {
-    find object and return linked list by ID or by date
-
+    /*find object and return linked list by ID or by date*/
+    void *dataCheck = NULL;
     LinkedNode *head = NULL;
+    dataCheck = get(dataCheck);
     if (tree->root == NULL) {
         printf("No objects\n");
         return NULL;
     }
-    head = findNodeHelper(tree->root, &head, get, compare);
+    head = findNodeHelper(tree->root, &head, dataCheck,compare);
     return head;
 }
-*/
 
-/**/
+double averageKey(Node *temp,double (*get)(void *), int counter) {
+    /*return the average of all sum of deals*/
+    double sumRight;
+    double sumLeft;
+    if (temp == NULL) {
+        return 0;
+    }
+    sumLeft = averageKey(temp->left,get ,counter);
+    sumRight = averageKey(temp->right,get ,counter);
+    return sumLeft + sumRight + (get(temp->data)) / counter;
+}
+
+
+
+void printTree(Node * node, void (*print)(void* Node)){
+    Node *tmp = node;
+    if(tmp == NULL){
+        return;
+    }
+    printTree(tmp->left , print);
+    print(tmp->data);
+    printTree(node->right , print);
+
+}
+
+
+void freeTreeHelper(Node *node , void (*freeData)(void *) ){
+    if (node == NULL) return;
+    else {Node *tmp = node;
+        /* first delete both subtrees */
+        freeTreeHelper( tmp->left, freeData);
+        freeTreeHelper(tmp->right , freeData);
+        /* then delete the node */
+        freeData(tmp->data);
+        checked_free(tmp->data);
+        checked_free(tmp);}
+}
+
+void freeTree(Tree* tree ){
+    freeTreeHelper(tree->root , tree->freeData);
+    tree->elementCount = 0;
+    tree->root = NULL;
+
+}

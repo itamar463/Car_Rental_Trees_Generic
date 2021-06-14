@@ -30,5 +30,6 @@ int addNewCar(Tree *carTree);
 int deleteCar(Tree *tree);
 int deleteAllCars(void * tree);
 int carNumberWithGivenCapacity(void * tree);
-
+LinkedNode * findCar(Tree *carTree);
+double priceAverage(Tree *carTree);
 #endif

@@ -152,6 +152,10 @@ void *carGetKey(void *car) {
     return ((Car *) car)->license_number;
 }
 
+double carGetNumber(void *car) {
+    return (double )((Car *) car)->present_car_price;
+}
+
 void *getLicenseNumber(void *check) {
     char licenseNumberCheck[LICENSE_NUM_LEN + 1];
     printf("Enter license number of car to be deleted: \n");
@@ -184,4 +188,10 @@ int addNewCar(Tree *carTree) {
 
 int deleteCar(Tree *carTree) {
     return removeNode(carTree, getLicenseNumber, licenseNumberCompare);
+}
+LinkedNode * findCar(Tree *carTree){
+    return findNode(carTree,getLicenseNumber,licenseNumberCompare);
+}
+double priceAverage(Tree *carTree){
+    return averageKey(carTree->root,carGetNumber,carTree->elementCount);
 }

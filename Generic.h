@@ -22,6 +22,8 @@ typedef struct Tree {
     void *(*get)(void *);
 
     void (*freeData)(void *);
+
+    void (*printTree)(void* );
 } Tree;
 typedef struct LinkedNode {
     void *data;
@@ -29,10 +31,11 @@ typedef struct LinkedNode {
 } LinkedNode;
 
 void *createTree(void *(*init)(), int (*compare)(void *data, void *root), void *(*get)(void *data),
-                 void freeData(void *data));
+                 void freeData(void *data),void (*printTree)(void* ));
 
 int addNewNode(Tree *tree);
-/**/
+
 int removeNode(Tree *tree, void *(*get)(void *data), int (*compare)(void *data, void *root));
 void *findNode(Tree *tree,void *(*get)(void *),int (*compare)(void *,void *));
+double averageKey(Node *temp,double (*get)(void *), int counter);
 #endif
