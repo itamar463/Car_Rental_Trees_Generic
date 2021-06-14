@@ -1,12 +1,6 @@
-//
-// Created by Itamar on 11/06/2021.
-//
+
 #include "Generic.h"
 #include "Car.h"
-
-void *createCarTree() {
-    return createTree();
-}
 
 void *init_car() {
     /* init a Vehicle struct by given details*/
@@ -147,17 +141,18 @@ void *init_car() {
 }
 
 int carKeyCompare(void *car, void *root) {
-    return (strcmp(((Car*)car)->license_number, ((Node*)root)->key));
+    return (strcmp(((Car *) car)->license_number, ((Node *) root)->key));
 }
 
-int licenseNumberCompare(void *car, void *licenseNumberCheck) {
-    return (strcmp(((char*)licenseNumberCheck),((Car*)car)->license_number));
+int licenseNumberCompare(void *licenseNumberCheck, void *car) {
+    return (strcmp(((char *) licenseNumberCheck), ((Car *) car)->license_number));
 }
 
 void *carGetKey(void *car) {
-    return ((Car*)car)->license_number;
+    return ((Car *) car)->license_number;
 }
-void * getLicenseNumber(void * check){
+
+void *getLicenseNumber(void *check) {
     char licenseNumberCheck[LICENSE_NUM_LEN + 1];
     printf("Enter license number of car to be deleted: \n");
     scanf("%s", licenseNumberCheck);
@@ -165,22 +160,28 @@ void * getLicenseNumber(void * check){
         printf("License number is not valid\n");
         return NULL;
     }
-    strcpy(check,licenseNumberCheck);
-    return (char*)check;
+    strcpy(check, licenseNumberCheck);
+    return (char *) check;
 
-}
-
-
-int addNewCar(Tree *carTree) {
-    return addNewNode(carTree, init_car, carKeyCompare,carGetKey);
 }
 
 void freeCar(void *car) {
     /*Free memory of car */
-    checked_free(((Car*)car)->color);
-    checked_free(((Car*)car)->maker);
-    checked_free(((Car*)car)->model);
+    checked_free(((Car *) car)->color);
+    checked_free(((Car *) car)->maker);
+    checked_free(((Car *) car)->model);
 }
-int deleteCar(Tree *carTree){
-    return removeNode(carTree,getLicenseNumber,licenseNumberCompare,freeCar);
+
+
+void *createCarTree() {
+    return createTree(init_car, carKeyCompare, carGetKey, freeCar);
+}
+
+
+int addNewCar(Tree *carTree) {
+    return addNewNode(carTree);
+}
+
+int deleteCar(Tree *carTree) {
+    return removeNode(carTree, getLicenseNumber, licenseNumberCompare);
 }
