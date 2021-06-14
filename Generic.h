@@ -32,7 +32,7 @@ void *createTree(void *(*init)(), int (*compare)(void *data, void *root), void *
                  void freeData(void *data));
 
 int addNewNode(Tree *tree);
-
+/**/
 int removeNode(Tree *tree, void *(*get)(void *data), int (*compare)(void *data, void *root));
 void *findNode(Tree *tree,void *(*get)(void *),int (*compare)(void *,void *));
 #endif

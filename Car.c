@@ -1,7 +1,7 @@
 
 #include "Generic.h"
 #include "Car.h"
-
+/**/
 void *init_car() {
     /* init a Vehicle struct by given details*/
     Car *car = (Car *) checked_malloc(sizeof(Car));
