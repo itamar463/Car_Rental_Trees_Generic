@@ -153,13 +153,11 @@ void threeGreatSuppliersHelper(Node *head,long check, char biggestSupplier[AUTH_
     if (head == NULL) {
         return;
     }
-    Supplier *i = head->data;
-
-    if (      (((Supplier*)temp)->sum_of_general_deals_withSupp > check) &&
-        (strcmp(((Supplier*)temp)->authorized_dealer_num, threeGreatSupp[0]) != 0) &&
-        (strcmp(((Supplier*)temp)->authorized_dealer_num, threeGreatSupp[1]) != 0)) {
-        check = ((Supplier*)temp)->sum_of_general_deals_withSupp;
-        strcpy(biggestSupplier, ((Supplier*)temp)->authorized_dealer_num);
+    if ((((Supplier*)head->data)->sum_of_general_deals_withSupp > check) &&
+        (strcmp(((Supplier*)head->data)->authorized_dealer_num, threeGreatSupp[0]) != 0) &&
+        (strcmp(((Supplier*)head->data)->authorized_dealer_num, threeGreatSupp[1]) != 0)) {
+        check = ((Supplier*)head->data)->sum_of_general_deals_withSupp;
+        strcpy(biggestSupplier, ((Supplier*)head->data)->authorized_dealer_num);
     }
 
     threeGreatSuppliersHelper(head->left,  check, biggestSupplier, threeGreatSupp);
