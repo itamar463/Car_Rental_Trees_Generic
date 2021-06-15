@@ -25,11 +25,21 @@ typedef struct Car {
     int present_car_price;
     int engine_cap;
 } Car;
+
 void *createCarTree();
+
 int addNewCar(Tree *carTree);
+
 int deleteCar(Tree *tree);
-int deleteAllCars(void * tree);
-int carNumberWithGivenCapacity(void * tree);
-LinkedNode * findCar(Tree *carTree);
+
+int deleteAllCars(void *tree);
+
+int carNumberWithGivenCapacity(Tree *tree);
+
+LinkedNode *findCar(Tree *carTree);
+
 double priceAverage(Tree *carTree);
+
+void *carToArray(Tree *tree);
+
 #endif

@@ -1,6 +1,7 @@
 
 #include "Generic.h"
 #include "Car.h"
+
 /**/
 void *init_car() {
     /* init a Vehicle struct by given details*/
@@ -153,20 +154,17 @@ void *carGetKey(void *car) {
 }
 
 double carGetNumber(void *car) {
-    return (double )((Car *) car)->present_car_price;
+    return (double) ((Car *) car)->present_car_price;
 }
 
-void *getLicenseNumber(void *check) {
-    char licenseNumberCheck[LICENSE_NUM_LEN + 1];
-    printf("Enter license number of car to be deleted: \n");
-    scanf("%s", licenseNumberCheck);
-    if (valid_digit_check(licenseNumberCheck) == 0 || check_equal_size(licenseNumberCheck, LICENSE_NUM_LEN) == 0) {
-        printf("License number is not valid\n");
-        return NULL;
-    }
-    strcpy(check, licenseNumberCheck);
-    return (char *) check;
+void printCar(void *root) {
+    printf("need to print\n");
+}
 
+void *carArray(void *tree) {
+
+    Car **array = (Car **) checked_malloc(sizeof(Car *) * ((Tree *) tree)->elementCount);
+    return array;
 }
 
 void freeCar(void *car) {
@@ -178,7 +176,7 @@ void freeCar(void *car) {
 
 
 void *createCarTree() {
-    return createTree(init_car, carKeyCompare, carGetKey, freeCar);
+    return createTree(init_car, carKeyCompare, carGetKey, freeCar, printCar);
 }
 
 
@@ -187,11 +185,66 @@ int addNewCar(Tree *carTree) {
 }
 
 int deleteCar(Tree *carTree) {
-    return removeNode(carTree, getLicenseNumber, licenseNumberCompare);
+    int check;
+    char licenseNumberCheck[LICENSE_NUM_LEN * 4];
+    printf("Enter license number of car to be deleted: \n");
+    scanf("%s", licenseNumberCheck);
+    if (valid_digit_check(licenseNumberCheck) == 0 || check_equal_size(licenseNumberCheck, LICENSE_NUM_LEN) == 0) {
+        printf("License number is not valid\n");
+        return 0;
+    }
+    check = removeNode(carTree, licenseNumberCheck, licenseNumberCompare);
+    if (check == 0) {
+        printf("Car doesn't found\n");
+    } else{
+        printf("Car has been deleted\n");
+    }
+    return check;
 }
-LinkedNode * findCar(Tree *carTree){
-    return findNode(carTree,getLicenseNumber,licenseNumberCompare);
+
+LinkedNode *findCar(Tree *carTree) {
+    char *license = "1234567";
+    return findNode(carTree, license, licenseNumberCompare);
 }
-double priceAverage(Tree *carTree){
-    return averageKey(carTree->root,carGetNumber,carTree->elementCount);
+
+double priceAverage(Tree *carTree) {
+    return averageKey(carTree->root, carGetNumber, carTree->elementCount);
+}
+
+void *carToArray(Tree *tree) {
+    return (treeToArray(tree, carArray));
+}
+
+int carNumberWithGivenCapacityHelper(Node *root, int engineCapacity) {
+    /* return the number of cars with the same capacity*/
+    int sumR, sumL;
+    int counter = 0;
+    if (root == NULL) {
+        return 0;
+    }
+    if (((Car *) root->data)->engine_cap == engineCapacity) {
+        counter = 1;
+    } else {
+        counter = 0;
+    }
+    sumR = carNumberWithGivenCapacityHelper(root->right, engineCapacity);
+    sumL = carNumberWithGivenCapacityHelper(root->left, engineCapacity);
+    return sumR + sumL + counter;
+}
+
+
+int carNumberWithGivenCapacity(Tree *tree) {
+    /* return the number of cars with the same capacity*/
+    int counter = 0;
+    int engineCapacity;
+    if (tree == NULL) {
+        printf("No cars\n");
+        return 0;
+    }
+    printf("Enter engine capacity\n");
+    scanf("%d", &engineCapacity);
+
+    counter = carNumberWithGivenCapacityHelper(tree->root, engineCapacity);
+    return counter;
+
 }
