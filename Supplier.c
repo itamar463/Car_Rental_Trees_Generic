@@ -92,14 +92,16 @@ void* initSupplier() {
         } else {
             temporarySupp->sum_of_general_deals_withSupp = sum_of_general_deals_withSupp;
             check = 1;
-        }
-    }
-
+        }}
     return temporarySupp;
 }
 
-int supplierCompare(void * authorized_dealer_num , void *authorized_dealer_num1){
-    return (strcmp((char*)authorized_dealer_num , (char *) authorized_dealer_num1));
+int supplierKeyCompare(void * supplier , void *root){
+    return (strcmp(((Supplier *) supplier)->authorized_dealer_num , ((Node *)root)->key ));
+}
+
+int authDealerNumCompare(void * authorized_dealer_num , void *supplier){
+    return (strcmp(((char *) authorized_dealer_num), ((Supplier *) supplier)->authorized_dealer_num));
 }
 
 void *supplierGetKey(void *supplier){
@@ -111,8 +113,91 @@ int addNewSupplier(Tree *supplierTree){
 }
 
 void* createSupplierTree(){
-    createTree(initSupplier ,supplierCompare , supplierGetKey  ,freeSupplier  , printSuppliers);
+    return createTree(initSupplier ,supplierKeyCompare , supplierGetKey  ,freeSupplier  , printSuppliers);
 }
+
+int deleteSupplier(Tree *suppTree){
+    /*Removing supplier by authorized dealer number get help from  deleteSupplierHelper func*/
+    int tmpCount = suppTree->elementCount;
+    int check;
+    char authorized_dealer_num[AUTH_DEALER_NUM_LEN + 1];
+    if (tmpCount == 0) {
+        printf("NO SUPPLIERS\n");
+        return 0;
+    }
+    printf("enter authorized_dealer_num (10 DIGITS): ");
+    scanf("%s", authorized_dealer_num);
+    check = removeNode(suppTree, authorized_dealer_num, authDealerNumCompare);
+    if (check == 0) {
+        printf("Supplier doesn't found\n");
+    } else{
+        printf("Supplier has been deleted\n");
+    }
+    return check;
+}
+
+double getSumOfDeals(void * supplier){
+    return ((Supplier*)supplier)->sum_of_general_deals_withSupp;
+}
+
+double averageOfSupplierMoney(Tree* supplierTree){
+    double res;
+    res  = averageKey(supplierTree->root ,getSumOfDeals , supplierTree->elementCount );
+    return res;
+}
+
+
+void threeGreatSuppliersHelper(Node *head,long check, char biggestSupplier[AUTH_DEALER_NUM_LEN + 1],
+                               char threeGreatSupp[3][11]) {
+    /*Find the three greatest Suppliers  */
+    if (head == NULL) {
+        return;
+    }
+    Supplier *i = head->data;
+
+    if (      (((Supplier*)temp)->sum_of_general_deals_withSupp > check) &&
+        (strcmp(((Supplier*)temp)->authorized_dealer_num, threeGreatSupp[0]) != 0) &&
+        (strcmp(((Supplier*)temp)->authorized_dealer_num, threeGreatSupp[1]) != 0)) {
+        check = ((Supplier*)temp)->sum_of_general_deals_withSupp;
+        strcpy(biggestSupplier, ((Supplier*)temp)->authorized_dealer_num);
+    }
+
+    threeGreatSuppliersHelper(head->left,  check, biggestSupplier, threeGreatSupp);
+    threeGreatSuppliersHelper(head->right,   check, biggestSupplier, threeGreatSupp);
+}
+
+
+char **threeGreatestSuppliers(Tree *supptree, char threeGreatSupp[3][11]) {
+    /*return and prints the three greatest suppliers get help from threeGreatSuppliersHelper func*/
+    int countDown = 3;
+    long check = 0;
+    int index = 0;
+    int i = 0;
+    char biggestSupplier[AUTH_DEALER_NUM_LEN + 1];
+    Node *temp = supptree->root;
+    if (supptree->elementCount == 0) {
+        printf("NO SUPPLIERS \n");
+    }
+    while (countDown > 0) {
+        strcpy(biggestSupplier, "0");
+        threeGreatSuppliersHelper(temp,  check, biggestSupplier, threeGreatSupp);
+        strcpy(threeGreatSupp[index], biggestSupplier);
+        countDown--;
+        index++;
+        check = 0;
+        strcpy(biggestSupplier, "");
+    }
+    printf("Three great suppliers are: \n");
+    printf("[ ");
+    for (i = 0; i < 3; i++) {
+        if (i < 2) {
+            printf(" %s |", threeGreatSupp[i]);
+        } else printf(" %s ", threeGreatSupp[i]);
+    }
+    printf("]\n");
+    return (char **) threeGreatSupp;
+}
+
 
 
 

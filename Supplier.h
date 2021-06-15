@@ -29,4 +29,9 @@ typedef struct {
 void* createSupplierTree();
 int addNewSupplier(Tree *supplierTree);
 void deleteAllSuppliers(Tree* supplierTree);
+int deleteSupplier(Tree *suppTree);
+void printSuppliers(void* suppRoot);
+double averageOfSupplierMoney(Tree* supplierTree);
+char **threeGreatestSuppliers(Tree *supptree, char threeGreatSupp[3][11]);
+
 #endif
