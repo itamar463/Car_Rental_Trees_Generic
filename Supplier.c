@@ -3,15 +3,17 @@
 #include "Supplier.h"
 
 void freeSupplier(void *supplier){
+    /*Free supplier name data*/
     checked_free(((Supplier*) supplier)->supplier_name);
 }
 
 void deleteAllSuppliers(Tree* supplierTree){
+    /*Use generic func to remove all suppliers*/
     freeTree(supplierTree );
 }
 
 void printSuppliers(void* suppRoot) {
-    /* Prints all supplier*/
+    /* Print all supplier details*/
     Supplier *tmp = suppRoot;
     printf("-------------------------\n");
     printf("SUPPLIER : \n");
@@ -97,27 +99,32 @@ void* initSupplier() {
 }
 
 int supplierKeyCompare(void * supplier , void *root){
+    /*Compare func between key node(supplier authorized dealer number) to add new supplier to the tree*/
     return (strcmp(((Supplier *) supplier)->authorized_dealer_num , ((Node *)root)->key ));
 }
 
 int authDealerNumCompare(void * authorized_dealer_num , void *supplier){
+    /*Compare func between given supplier authorized dealer number to remove supplier from tree*/
     return (strcmp(((char *) authorized_dealer_num), ((Supplier *) supplier)->authorized_dealer_num));
 }
 
 void *supplierGetKey(void *supplier){
+    /*return supplier authorized dealer number*/
     return (((Supplier *) supplier)->authorized_dealer_num);
 }
 
 int addNewSupplier(Tree *supplierTree){
+    /*Add new supplier by help from generic add node func*/
     return addNewNode(supplierTree );
 }
 
 void* createSupplierTree(){
+    /*Create new supplier tree by help from generic create tree func*/
     return createTree(initSupplier ,supplierKeyCompare , supplierGetKey  ,freeSupplier  , printSuppliers);
 }
 
 int deleteSupplier(Tree *suppTree){
-    /*Removing supplier by authorized dealer number get help from  deleteSupplierHelper func*/
+    /*Removing supplier by authorized dealer number get help from generic remove node  func*/
     int tmpCount = suppTree->elementCount;
     int check;
     char authorized_dealer_num[AUTH_DEALER_NUM_LEN + 1];
@@ -137,13 +144,13 @@ int deleteSupplier(Tree *suppTree){
 }
 
 double getSumOfDeals(void * supplier){
+    /*Return sum of deals of supplier*/
     return ((Supplier*)supplier)->sum_of_general_deals_withSupp;
 }
 
 double averageOfSupplierMoney(Tree* supplierTree){
-    double res;
-    res  = averageKey(supplierTree->root ,getSumOfDeals , supplierTree->elementCount );
-    return res;
+    /*return average Of Supplier Money by help from generic average func*/
+    return averageKey(supplierTree->root ,getSumOfDeals , supplierTree->elementCount );
 }
 
 
@@ -186,13 +193,9 @@ char **threeGreatestSuppliers(Tree *supptree, char threeGreatSupp[3][11]) {
         strcpy(biggestSupplier, "");
     }
     printf("Three great suppliers are: \n");
-    printf("[ ");
     for (i = 0; i < 3; i++) {
-        if (i < 2) {
-            printf(" %s |", threeGreatSupp[i]);
-        } else printf(" %s ", threeGreatSupp[i]);
-    }
-    printf("]\n");
+        printf("%d : %s\n" , i+1 , threeGreatSupp[i]);
+        }
     return (char **) threeGreatSupp;
 }
 
