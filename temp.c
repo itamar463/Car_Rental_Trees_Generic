@@ -132,7 +132,7 @@ int deleteAllNodesLinkedList(LinkedNode **head) {
         *head = temp->next;
         checked_free(temp);
     }
-    checked_free(head);
+
     printf("ALL CLIENTS REMOVED\n");
     return 1;
 }
