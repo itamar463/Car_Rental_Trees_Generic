@@ -1,5 +1,4 @@
 
-
 #include "Supplier.h"
 
 void freeSupplier(void *supplier){

@@ -2,7 +2,7 @@
 #include "Generic.h"
 #include "Car.h"
 
-/**/
+
 void *init_car() {
     /* init a Vehicle struct by given details*/
     Car *car = (Car *) checked_malloc(sizeof(Car));
@@ -142,20 +142,35 @@ void *init_car() {
 }
 
 int carKeyCompare(void *car, void *root) {
+    /*compare between license numbers */
     return (strcmp(((Car *) car)->license_number, ((Node *) root)->key));
 }
 
 int licenseNumberCompare(void *licenseNumberCheck, void *car) {
+    /*compare between license numbers */
     return (strcmp(((char *) licenseNumberCheck), ((Car *) car)->license_number));
 }
 
 void *carGetKey(void *car) {
+    /*return car license numbers */
     return ((Car *) car)->license_number;
 }
 
 
 void printCar(void *root) {
-    printf("need to print\n");
+    /*print car details*/
+    Car *car = root;
+    printf("Car :\n License number: %s\n"
+           "Chassis number: %s\n"
+           "Maker: %s\n"
+           "Model: %s\n"
+           "Color: %s\n"
+           "Year manufacture: %d\n"
+           "Year get on road: %d\n"
+           "Price that paid: %d\n"
+           "Current price: %d\n"
+           "Engine capacity: %d\n\n", car->license_number, car->chassis_number, car->maker, car->model, car->color,
+           car->year_manufacture,car->year_get_on_road,car->price_that_paid,car->present_car_price,car->engine_cap);
 }
 
 void freeCar(void *car) {
@@ -167,15 +182,18 @@ void freeCar(void *car) {
 
 
 void *createCarTree() {
+    /* initalize a new car tree by generic func */
     return createTree(init_car, carKeyCompare, carGetKey, freeCar, printCar);
 }
 
 
 int addNewCar(Tree *carTree) {
+    /*add new car to tree by generic func */
     return addNewNode(carTree);
 }
 
 int deleteCar(Tree *carTree) {
+    /*delete car by license number using generic func */
     int check;
     char licenseNumberCheck[LICENSE_NUM_LEN * 4];
     printf("Enter license number of car to be deleted: \n");
@@ -187,15 +205,16 @@ int deleteCar(Tree *carTree) {
     check = removeNode(carTree, licenseNumberCheck, licenseNumberCompare);
     if (check == 0) {
         printf("Car doesn't found\n");
-    } else{
+    } else {
         printf("Car has been deleted\n");
     }
     return check;
 }
 
 
-void deleteAllCars(Tree* carTree){
-    freeTree(carTree );
+void deleteAllCars(Tree *carTree) {
+    /*delete all cars from tree by using generic func */
+    freeTree(carTree);
 }
 
 int carNumberWithGivenCapacityHelper(Node *root, int engineCapacity) {
@@ -231,29 +250,3 @@ int carNumberWithGivenCapacity(Tree *tree) {
     return counter;
 
 }
-
-LinkedNode *findCar(Tree *carTree) {
-    char *license = "1234567";
-    return findNode(carTree, license, licenseNumberCompare);
-}
-
-/*
-
-double priceAverage(Tree *carTree) {
-    return averageKey(carTree->root, carGetNumber, carTree->elementCount);
-}
-
-void *carToArray(Tree *tree) {
-    return (treeToArray(tree, carArray));
-}
-double carGetNumber(void *car) {
-    return (double) ((Car *) car)->present_car_price;
-}
-
-void *carArray(void *tree) {
-
-    Car **array = (Car **) checked_malloc(sizeof(Car *) * ((Tree *) tree)->elementCount);
-    return array;
-}
-
-*/

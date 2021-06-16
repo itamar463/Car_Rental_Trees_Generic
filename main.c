@@ -1,8 +1,5 @@
 
 #include <stdio.h>
-#include "Supplier.h"
-#include "Client.h"
-#include "Car.h"
 #include "Common.h"
 
 
@@ -19,13 +16,13 @@ void print(Tree *supplierTree, Tree *clientTree, Tree *carTree) {
         scanf("%d", &n_print);
         switch (n_print) {
             case 1:
-                printTree(supplierTree , supplierTree->printTree);
+                printTree(supplierTree->root , supplierTree->printTree);
                 break;
             case 2:
-                printTree(supplierTree , clientTree->printTree);
+                printTree(clientTree->root , clientTree->printTree);
                 break;
             case 3:
-                printTree(supplierTree , carTree->printTree);
+                printTree(carTree->root , carTree->printTree);
                 break;
             case 0:
                 break;
@@ -122,14 +119,15 @@ int deleteAllNodesLinkedList(LinkedNode **head) {
         *head = temp->next;
         checked_free(temp);
     }
-    printf("ALL CLIENTS REMOVED\n");
+    checked_free(head);
+
     return 1;
 }
 
 
 void menu(Tree *supplierTree, Tree *clientTree, Tree *carTree) {
     /* menu program for adding and getting details from all the structs*/
-    LinkedNode *clientList = (LinkedNode *) checked_malloc(sizeof(LinkedNode));
+    LinkedNode *clientList = (LinkedNode*) checked_malloc(sizeof(LinkedNode));
     char threeGreatSupplier[3][11];
     int stop = 20;
     while (stop != 0) {
@@ -168,20 +166,20 @@ void menu(Tree *supplierTree, Tree *clientTree, Tree *carTree) {
                 printf("Number of cars with the same capacity  : %d\n", carNumberWithGivenCapacity(carTree));
                 break;
             case 6:
-                findClient(clientTree , clientList);
+                findClient(clientTree , &clientList);
                 break;
             case 7:
                 threeGreatestSuppliers(supplierTree, threeGreatSupplier);
                 break;
             case 8:
                 printf("Average of suppliers money : %.2f\n",
-                       averageOfSupplierMoney(supplierTree->root));
+                       averageOfSupplierMoney(supplierTree));
                 break;
             case 9:
                 printClientCarsForGivenRentDate(clientTree);
                 break;
             case 10:
-                printSuppliers(supplierTree->root);
+                print(supplierTree,clientTree,carTree);
                 break;
             case 11:
                 delete(supplierTree, clientTree, carTree);

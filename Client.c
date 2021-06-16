@@ -152,25 +152,29 @@ void *initClient() {
 
 
 int clientKeyCompare(void *client, void *root) {
+    /*return strcmp between given license number */
     return (strcmp(((Client *) client)->id, ((Node *) root)->key));
 }
 
 int idCompare(void *IdCheck, void *client) {
+    /*return strcmp between given license number */
     return (strcmp(((char *) IdCheck), ((Client *) client)->id));
 }
 
 void *clientGetKey(void *client) {
+    /*return client ID */
     return ((Client *) client)->id;
 }
 
 void printClient(void *root) {
+    /*print client details */
     Client *client = root;
     printf("CLIENT :\n"
            "first name : %s\n"
            "last name : %s\n"
            "id : %s\n"
            "car licence number : %s\n"
-           "rent price for 24 hours : %d \n", client->first_name, client->last_name,
+           "rent price for 24 hours : %d \n\n", client->first_name, client->last_name,
            client->id,
            client->license_number, client->price_per_rent);
     printf("rent date : ");
@@ -187,14 +191,17 @@ void freeClient(void *client) {
 
 
 void *createClientTree() {
+    /*initialize new client tree ny generic func */
     return createTree(initClient, clientKeyCompare, clientGetKey, freeClient, printClient);
 }
 
 int addNewClient(Tree *clientTree) {
+    /* add new node to the tree by generic func*/
     return addNewNode(clientTree);
 }
 
 int deleteClient(Tree *clientTree) {
+    /*delete client from tree by generic func */
     int check;
     char idCheck[ID_LEN * 4];
     printf("Enter ID of client to be deleted: \n");
@@ -214,6 +221,7 @@ int deleteClient(Tree *clientTree) {
 
 
 void deleteAllClients(Tree *clientTree) {
+    /*delete all clients from tree */
     freeTree(clientTree);
 }
 
@@ -256,6 +264,7 @@ int printClientCarsForGivenRentDate(Tree *clientTree) {
 }
 
 int dateCompare(void *date, void *client) {
+    /* date compare func return 0 if equal*/
     if ((((Date *) date)->year == ((Client *) client)->date_of_rent.year) &&
         (((Date *) date)->month == ((Client *) client)->date_of_rent.month) &&
         (((Date *) date)->day == ((Client *) client)->date_of_rent.day)) {
