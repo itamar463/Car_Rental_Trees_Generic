@@ -115,7 +115,6 @@ int removeNode(Tree *tree, void * detailCheck, int (*compare)(void *data, void *
         printf("Empty tree\n");
         return 0;
     }
-
     tree->root = removeNodeHelper(tree->root, detailCheck, &tree->elementCount, compare, tree->freeData);
     if (tmpCount == tree->elementCount) {
         return 0;
@@ -150,7 +149,7 @@ LinkedNode *findNodeHelper(Node *root, LinkedNode **head, void * dataCheck, int 
     return (*head);
 }
 
-void *findNode(Tree *tree, void * dataCheck, int (*compare)(void *, void *)) {
+void *findNode(Tree *tree, void *dataCheck, int (*compare)(void *, void *)) {
     /*find object and return linked list by ID or by date*/
     LinkedNode *head = NULL;
 
@@ -163,7 +162,7 @@ void *findNode(Tree *tree, void * dataCheck, int (*compare)(void *, void *)) {
 }
 
 double averageKey(Node *temp,double (*get)(void *), int counter) {
-    /*return the average of all sum of deals*/
+    /*Generic func - Return the average of all sum of keys , get help by specific func to key*/
     double sumRight;
     double sumLeft;
     if (temp == NULL) {
@@ -177,8 +176,9 @@ double averageKey(Node *temp,double (*get)(void *), int counter) {
 
 
 void printTree(Node * node, void (*print)(void* Node)){
+    /*Generic func to print tree , get help by specific func to each tree*/
     Node *tmp = node;
-    if(tmp == NULL){
+    if(tmp->data == NULL){
         return;
     }
     printTree(tmp->left , print);
@@ -189,6 +189,7 @@ void printTree(Node * node, void (*print)(void* Node)){
 
 
 void freeTreeHelper(Node *node , void (*freeData)(void *) ){
+    /*Help generic func freeTree to delete tree by help from specific freeData func*/
     if (node == NULL) return;
     else {Node *tmp = node;
         /* first delete both subtrees */
@@ -201,12 +202,14 @@ void freeTreeHelper(Node *node , void (*freeData)(void *) ){
 }
 
 void freeTree(Tree* tree ){
+    /*Generic func to remove all the tree get help from freeTreeHelper func*/
     freeTreeHelper(tree->root , tree->freeData);
     tree->elementCount = 0;
     tree->root = NULL;
 
 }
 void  treeToArrayHelper(Node* root,void ** array, int* counter,int size){
+    /*Help func to convert tree to array*/
     if(root == NULL || (*counter)==size){
         return ;
     }
@@ -218,6 +221,7 @@ void  treeToArrayHelper(Node* root,void ** array, int* counter,int size){
 }
 
 void *treeToArray(Tree* tree,void *(*get)(void *)){
+    /*Generic func to convert tree to array*/
     int counter = 0;
     void ** treeArray = get(tree);
     treeToArrayHelper(tree->root,treeArray,&counter,tree->elementCount);
