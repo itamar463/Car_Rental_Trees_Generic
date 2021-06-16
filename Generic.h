@@ -23,7 +23,7 @@ typedef struct Tree {
 
     void (*freeData)(void *);
 
-    void (*printTree)(void* );
+    void (*printTree)(void *);
 } Tree;
 typedef struct LinkedNode {
     void *data;
@@ -31,17 +31,20 @@ typedef struct LinkedNode {
 } LinkedNode;
 
 void *createTree(void *(*init)(), int (*compare)(void *data, void *root), void *(*get)(void *data),
-                 void freeData(void *data),void (*printTree)(void* ));
+                 void freeData(void *data), void (*printTree)(void *));
 
 int addNewNode(Tree *tree);
 
-void freeTree(Tree* tree );
+void freeTree(Tree *tree);
 
-void printTree(Node* node, void (*print)(void* Node));
+void printTree(Node *node, void (*print)(void *Node));
 
-int removeNode(Tree *tree, void *(*get)(void *data), int (*compare)(void *data, void *root));
+int removeNode(Tree *tree, void * detailCheck, int (*compare)(void *data, void *root));
 
-void *findNode(Tree *tree,void *(*get)(void *),int (*compare)(void *,void *));
+void *findNode(Tree *tree, void * dataCheck, int (*compare)(void *, void *));
 
-double averageKey(Node *temp,double (*get)(void *), int counter);
+double averageKey(Node *temp, double (*get)(void *), int counter);
+
+void *treeToArray(Tree *tree, void *(*getArray)(void *));
+
 #endif

@@ -123,4 +123,19 @@ int deleteCar(Tree *carTree) {
 }
 
 
+
+int deleteAllNodesLinkedList(LinkedNode **head) {
+    /*REMOVE ALL THE CLIENTS*/
+    LinkedNode *temp = (*head);
+    while (*head != NULL) {
+        temp = *head;
+        *head = temp->next;
+        checked_free(temp);
+    }
+    checked_free(head);
+    printf("ALL CLIENTS REMOVED\n");
+    return 1;
+}
+
+
 /**/

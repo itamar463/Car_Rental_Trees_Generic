@@ -153,18 +153,9 @@ void *carGetKey(void *car) {
     return ((Car *) car)->license_number;
 }
 
-double carGetNumber(void *car) {
-    return (double) ((Car *) car)->present_car_price;
-}
 
 void printCar(void *root) {
     printf("need to print\n");
-}
-
-void *carArray(void *tree) {
-
-    Car **array = (Car **) checked_malloc(sizeof(Car *) * ((Tree *) tree)->elementCount);
-    return array;
 }
 
 void freeCar(void *car) {
@@ -202,17 +193,9 @@ int deleteCar(Tree *carTree) {
     return check;
 }
 
-LinkedNode *findCar(Tree *carTree) {
-    char *license = "1234567";
-    return findNode(carTree, license, licenseNumberCompare);
-}
 
-double priceAverage(Tree *carTree) {
-    return averageKey(carTree->root, carGetNumber, carTree->elementCount);
-}
-
-void *carToArray(Tree *tree) {
-    return (treeToArray(tree, carArray));
+void deleteAllCars(Tree* carTree){
+    freeTree(carTree );
 }
 
 int carNumberWithGivenCapacityHelper(Node *root, int engineCapacity) {
@@ -248,3 +231,29 @@ int carNumberWithGivenCapacity(Tree *tree) {
     return counter;
 
 }
+
+LinkedNode *findCar(Tree *carTree) {
+    char *license = "1234567";
+    return findNode(carTree, license, licenseNumberCompare);
+}
+
+/*
+
+double priceAverage(Tree *carTree) {
+    return averageKey(carTree->root, carGetNumber, carTree->elementCount);
+}
+
+void *carToArray(Tree *tree) {
+    return (treeToArray(tree, carArray));
+}
+double carGetNumber(void *car) {
+    return (double) ((Car *) car)->present_car_price;
+}
+
+void *carArray(void *tree) {
+
+    Car **array = (Car **) checked_malloc(sizeof(Car *) * ((Tree *) tree)->elementCount);
+    return array;
+}
+
+*/

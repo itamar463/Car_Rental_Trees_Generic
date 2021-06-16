@@ -32,7 +32,7 @@ int addNewCar(Tree *carTree);
 
 int deleteCar(Tree *tree);
 
-int deleteAllCars(void *tree);
+void deleteAllCars(Tree* carTree);
 
 int carNumberWithGivenCapacity(Tree *tree);
 

@@ -1,8 +1,8 @@
 #include "Generic.h"
-#include "matam.h"
 
-void *createTree(void *(*init)(), int (*compare)(void *data, void *root), void *(*get)(void *data),
-                 void freeData(void *data),void (*printTree)(void* data)) {
+
+void *createTree(void *(*init)(), int (*compare)(void *, void *), void *(*get)(void *),
+                 void freeData(void *),void (*printTree)(void* )) {
     /*Creat new tree of cars*/
     Tree *tree = (Tree *) checked_malloc(sizeof(Tree));
     tree->root = NULL;
@@ -61,7 +61,7 @@ void freeNode(Node *root, void freeData(void *data)) {
     checked_free(root);
 }
 
-Node *removeNodeHelper(Node *root, char *detailCheck, int *elementCounter, int (*compare)(void *data, void *root),
+Node *removeNodeHelper(Node *root, void *detailCheck, int *elementCounter, int (*compare)(void *data, void *root),
                        void freeData(void *data)) {
     /*Check for the given car to delete and replace his position if needed*/
     if (root == NULL) {
@@ -108,37 +108,20 @@ Node *removeNodeHelper(Node *root, char *detailCheck, int *elementCounter, int (
     return root;
 }
 
-int removeNode(Tree *tree, void *(*get)(void *), int (*compare)(void *data, void *root)) {
+int removeNode(Tree *tree, void * detailCheck, int (*compare)(void *data, void *root)) {
     /*Delete object by help funcs*/
     int tmpCount = tree->elementCount;
-    char *detailCheck = (char *) checked_malloc(sizeof(char) * 256);
-    detailCheck = (*get)(detailCheck);
     if (tree->root == NULL) {
         printf("Empty tree\n");
-        checked_free(detailCheck);
         return 0;
     }
 
     tree->root = removeNodeHelper(tree->root, detailCheck, &tree->elementCount, compare, tree->freeData);
     if (tmpCount == tree->elementCount) {
-        printf("Object doesnt found\n");
-    } else printf("Object has been deleted\n");
-    checked_free(detailCheck);
-    return 1;
-
-}
-
-int deleteAllNodesLinkedList(LinkedNode **head) {
-    /*REMOVE ALL THE CLIENTS*/
-    LinkedNode *temp = (*head);
-    while (*head != NULL) {
-        temp = *head;
-        *head = temp->next;
-        checked_free(temp);
+        return 0;
     }
-    checked_free(head);
-    printf("ALL CLIENTS REMOVED\n");
     return 1;
+
 }
 
 
@@ -160,18 +143,17 @@ LinkedNode *findNodeHelper(Node *root, LinkedNode **head, void * dataCheck, int 
         return NULL;
     }
     findNodeHelper(root->left, head, dataCheck,compare);
-    if (compare(root->data,dataCheck) == 0) {
+    if (compare(dataCheck,root->data) == 0) {
         (*head) = addToList(head, root->data);
     }
     findNodeHelper(root->right, head, dataCheck,compare);
     return (*head);
 }
 
-void *findNode(Tree *tree, void *(*get)(void *), int (*compare)(void *, void *)) {
+void *findNode(Tree *tree, void * dataCheck, int (*compare)(void *, void *)) {
     /*find object and return linked list by ID or by date*/
-    void *dataCheck = NULL;
     LinkedNode *head = NULL;
-    dataCheck = get(dataCheck);
+
     if (tree->root == NULL) {
         printf("No objects\n");
         return NULL;
@@ -223,4 +205,21 @@ void freeTree(Tree* tree ){
     tree->elementCount = 0;
     tree->root = NULL;
 
+}
+void  treeToArrayHelper(Node* root,void ** array, int* counter,int size){
+    if(root == NULL || (*counter)==size){
+        return ;
+    }
+    treeToArrayHelper(root->left,array,counter,size);
+    treeToArrayHelper(root->right,array,counter,size);
+    array[(*counter)] = root->data;
+    (*counter)++;
+
+}
+
+void *treeToArray(Tree* tree,void *(*get)(void *)){
+    int counter = 0;
+    void ** treeArray = get(tree);
+    treeToArrayHelper(tree->root,treeArray,&counter,tree->elementCount);
+    return treeArray ;
 }
